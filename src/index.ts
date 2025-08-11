@@ -503,6 +503,7 @@ export type HasProps =
   // tslint:disable-next-line: deprecation
   | StrictType<any, any, any, any>
   | PartialType<any, any, any, any>
+  | SemiPartialType<any, any, any, any>
 
 function getProps(codec: HasProps): Props {
   switch (codec._tag) {
@@ -515,6 +516,8 @@ function getProps(codec: HasProps): Props {
       return codec.props
     case 'IntersectionType':
       return codec.types.reduce<Props>((props, type) => Object.assign(props, getProps(type)), {})
+    case 'SemiPartialType':
+      return codec.props
   }
 }
 
