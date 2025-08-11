@@ -1,6 +1,7 @@
 import * as assert from 'assert'
 import { fold } from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/pipeable'
+
 import * as t from '../../src/index'
 import { asOptional, assertFailure, assertStrictEqual, assertSuccess, NumberFromString, withDefault } from './helpers'
 

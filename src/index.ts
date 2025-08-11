@@ -1298,7 +1298,7 @@ export function array<C extends Mixed>(item: C, name = `Array<${item.name}>`): A
   )
 }
 
-function testRequiredProps(value: { [key: string]: unknown }, count: number, keys: string[], types: Mixed[]): boolean {
+function testRequiredProps(value: { [key: string]: unknown }, count: number, keys: Array<string>, types: Array<Mixed>): boolean {
   for (let i = 0; i < count; ++i) {
     const key = keys[i]
     const propValue = value[key]
@@ -1313,7 +1313,7 @@ function testRequiredProps(value: { [key: string]: unknown }, count: number, key
   return true
 }
 
-function testOptionalProps(value: { [key: string]: unknown }, count: number, keys: string[], types: Mixed[]): boolean {
+function testOptionalProps(value: { [key: string]: unknown }, count: number, keys: Array<string>, types: Array<Mixed>): boolean {
   for (let i = 0; i < count; ++i) {
     const key = keys[i]
     const type = types[i]
@@ -1328,8 +1328,8 @@ function testOptionalProps(value: { [key: string]: unknown }, count: number, key
 function validateRequiredProps<R extends { [key: string]: unknown }>(
   record: R,
   count: number,
-  keys: string[],
-  types: Mixed[],
+  keys: Array<string>,
+  types: Array<Mixed>,
   errors: Errors,
   context: Context
 ): R {
@@ -1357,8 +1357,8 @@ function validateRequiredProps<R extends { [key: string]: unknown }>(
 function validateOptionalProps<R extends { [key: string]: unknown }>(
   record: R,
   count: number,
-  keys: string[],
-  types: Mixed[],
+  keys: Array<string>,
+  types: Array<Mixed>,
   errors: Errors,
   context: Context
 ): R {
@@ -1389,8 +1389,8 @@ function encodeRequiredProps<R extends { [x: string]: any }>(
   record: R,
   result: { [x: string]: any },
   count: number,
-  keys: string[],
-  types: Mixed[]
+  keys: Array<string>,
+  types: Array<Mixed>
 ): void {
   for (let i = 0; i < count; ++i) {
     const key = keys[i]
@@ -1406,8 +1406,8 @@ function encodeOptionalProps<R extends { [x: string]: any }>(
   record: R,
   result: { [x: string]: any },
   count: number,
-  keys: string[],
-  types: Mixed[]
+  keys: Array<string>,
+  types: Array<Mixed>
 ): void {
   for (let i = 0; i < count; ++i) {
     const key = keys[i]
@@ -1606,8 +1606,8 @@ export interface SemiPartialC<P extends SemiProps>
 
 interface SemiPropsFields<P extends SemiProps> {
   count: number
-  keys?: StrKey<P>[]
-  types?: AsType<P[StrKey<P>]>[]
+  keys?: Array<StrKey<P>>
+  types?: Array<AsType<P[StrKey<P>]>>
 }
 
 interface SemiPropsInfo<P extends SemiProps> {
@@ -1632,12 +1632,12 @@ function isTypedProp<T>(prop: AnyProp<T>): prop is TypedProp<T> {
 }
 
 function getPartialPropsInfo<P extends SemiProps>(properties: P, name: string | undefined): SemiPropsInfo<P> {
-  let requiredKeys: StrKey<P>[] | undefined
-  let requiredTypes: AsType<P[StrKey<P>]>[] | undefined
+  let requiredKeys: Array<StrKey<P>> | undefined
+  let requiredTypes: Array<AsType<P[StrKey<P>]>> | undefined
   let requiredCount = 0
 
-  let optionalKeys: StrKey<P>[] | undefined
-  let optionalTypes: AsType<P[StrKey<P>]>[] | undefined
+  let optionalKeys: Array<StrKey<P>> | undefined
+  let optionalTypes: Array<AsType<P[StrKey<P>]>> | undefined
   let optionalCount = 0
 
   let useIdentity = true
