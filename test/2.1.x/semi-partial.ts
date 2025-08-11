@@ -3,6 +3,7 @@ import { fold } from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/pipeable'
 
 import * as t from '../../src/index'
+import { getTags } from '../../src/index'
 import { asOptional, assertFailure, assertStrictEqual, assertSuccess, NumberFromString, withDefault } from './helpers'
 
 describe('type', () => {
@@ -294,5 +295,22 @@ describe('type', () => {
     assert.strictEqual(type.is({ p2: 'p2', p4: 'p4' }), false)
     assert.strictEqual(type.is({ p1: 'p1', p3: 'p3' }), true)
     assert.strictEqual(type.is({ p1: 'p1', p2: 'p2', p3: 'p3' }), true)
+  })
+
+  describe('getTags', () => {
+    it('required fields can be tags', () => {
+      const T = t.semiPartial({ tag: t.literal('X') })
+      expect(getTags(T)).toStrictEqual({ tag: ['X'] })
+    })
+
+    it('required fields explicitly marked as not optional can be tags', () => {
+      const T = t.semiPartial({ tag: { type: t.literal('X'), optional: false } })
+      expect(getTags(T)).toStrictEqual({ tag: ['X'] })
+    })
+
+    it('optional fields cannot be tags', () => {
+      const T = t.semiPartial({ tag: { type: t.literal('X'), optional: true } })
+      expect(getTags(T)).toStrictEqual({})
+    })
   })
 })

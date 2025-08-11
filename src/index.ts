@@ -634,6 +634,10 @@ function isPartialC(codec: Any): codec is PartialC<Props> {
   return (codec as any)._tag === 'PartialType'
 }
 
+function isSemiPartialC(codec: Any): codec is SemiPartialC<SemiProps> {
+  return (codec as any)._tag === 'SemiPartialType'
+}
+
 // tslint:disable-next-line: deprecation
 function isStrictC(codec: Any): codec is StrictC<Props> {
   return (codec as any)._tag === 'StrictType'
@@ -683,6 +687,28 @@ export function getTags(codec: Any): Tags {
           index = {}
         }
         index[k] = [prop.value]
+      }
+    }
+    return index
+  } else if (isSemiPartialC(codec)) {
+    let index: Tags = emptyTags
+    // tslint:disable-next-line: forin
+    for (const k in codec.props) {
+      const prop = codec.props[k]
+      let requiredPropType: Mixed | null = null
+
+      if (isTypedProp(prop)) {
+        if (!prop.optional) {
+          requiredPropType = prop.type
+        }
+      } else {
+        requiredPropType = prop
+      }
+      if (requiredPropType !== null && isLiteralC(requiredPropType)) {
+        if (index === emptyTags) {
+          index = {}
+        }
+        index[k] = [requiredPropType.value]
       }
     }
     return index
