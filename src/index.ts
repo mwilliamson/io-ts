@@ -1298,7 +1298,12 @@ export function array<C extends Mixed>(item: C, name = `Array<${item.name}>`): A
   )
 }
 
-function testRequiredProps(value: { [key: string]: unknown }, count: number, keys: Array<string>, types: Array<Mixed>): boolean {
+function testRequiredProps(
+  value: { [key: string]: unknown },
+  count: number,
+  keys: Array<string>,
+  types: Array<Mixed>
+): boolean {
   for (let i = 0; i < count; ++i) {
     const key = keys[i]
     const propValue = value[key]
@@ -1313,7 +1318,12 @@ function testRequiredProps(value: { [key: string]: unknown }, count: number, key
   return true
 }
 
-function testOptionalProps(value: { [key: string]: unknown }, count: number, keys: Array<string>, types: Array<Mixed>): boolean {
+function testOptionalProps(
+  value: { [key: string]: unknown },
+  count: number,
+  keys: Array<string>,
+  types: Array<Mixed>
+): boolean {
   for (let i = 0; i < count; ++i) {
     const key = keys[i]
     const type = types[i]
@@ -1556,7 +1566,11 @@ export type SemiProps = {
   [key: string]: AnyProp<any, any, any>
 }
 
-export type AsType<P extends AnyProp<any, any, any>> = P extends Mixed ? P : P extends TypedProp<any, any, any> ? P['type'] : never
+export type AsType<P extends AnyProp<any, any, any>> = P extends Mixed
+  ? P
+  : P extends TypedProp<any, any, any>
+  ? P['type']
+  : never
 
 type StrKey<T> = keyof T & string
 
@@ -1584,17 +1598,15 @@ export class SemiPartialType<P extends SemiProps, A = any, O = A, I = unknown> e
 
 type SemiPropsTypes<P extends SemiProps> = {
   [K in RequiredProps<P>]: TypeOf<AsType<P[K]>>
-} &
-  {
-    [K in OptionalProps<P>]?: TypeOf<AsType<P[K]>> | undefined
-  }
+} & {
+  [K in OptionalProps<P>]?: TypeOf<AsType<P[K]>> | undefined
+}
 
 type SemiPropsOutputs<P extends SemiProps> = {
   [K in RequiredProps<P>]: OutputOf<AsType<P[K]>>
-} &
-  {
-    [K in OptionalProps<P>]?: OutputOf<AsType<P[K]>> | undefined
-  }
+} & {
+  [K in OptionalProps<P>]?: OutputOf<AsType<P[K]>> | undefined
+}
 
 export interface SemiPartialC<P extends SemiProps>
   extends SemiPartialType<
