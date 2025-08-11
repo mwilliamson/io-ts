@@ -195,7 +195,8 @@ describe('type', () => {
     const type = t.semiPartial({
       p1: t.string,
       p2: {
-        type: t.string
+        type: t.string,
+        optional: false
       },
       p3: {
         type: t.string,
@@ -312,5 +313,10 @@ describe('type', () => {
       const T = t.semiPartial({ tag: { type: t.literal('X'), optional: true } })
       expect(getTags(T)).toStrictEqual({})
     })
+  })
+
+  it('can decode array props', () => {
+    const T = t.semiPartial({ names: t.array(t.string) })
+    assertSuccess(T.decode({ names: [] }), { names: [] })
   })
 })
