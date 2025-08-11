@@ -1581,7 +1581,7 @@ export type OptionalTypedProp<A, O, I> = {
 
 export type RequiredTypedProp<A, O, I> = {
   type: Type<A, O, I>
-  optional?: false
+  optional: false
 }
 
 export type TypedProp<A, O, I> = OptionalTypedProp<A, O, I> | RequiredTypedProp<A, O, I>
@@ -1657,7 +1657,7 @@ interface SemiPropsInfo<P extends SemiProps> {
 
 function isTypedProp<A, O, I>(prop: AnyProp<A, O, I>): prop is TypedProp<A, O, I> {
   const maybe = prop as Partial<TypedProp<A, O, I>>
-  if (typeof maybe.type !== 'object') {
+  if (typeof maybe.type !== 'object' || !hasOwnProperty.call(maybe, 'optional')) {
     return false
   }
   switch (typeof maybe.optional) {
