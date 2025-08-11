@@ -1538,34 +1538,34 @@ export function partial<P extends Props>(
   )
 }
 
-export type OptionalTypedProp<T> = {
-  type: Type<T>
+export type OptionalTypedProp<A, O, I> = {
+  type: Type<A, O, I>
   optional: true
 }
 
-export type RequiredTypedProp<T> = {
-  type: Type<T>
+export type RequiredTypedProp<A, O, I> = {
+  type: Type<A, O, I>
   optional?: false
 }
 
-export type TypedProp<T> = OptionalTypedProp<T> | RequiredTypedProp<T>
+export type TypedProp<A, O, I> = OptionalTypedProp<A, O, I> | RequiredTypedProp<A, O, I>
 
-export type AnyProp<T> = Type<T> | TypedProp<T>
+export type AnyProp<A, O, I> = Type<A, O, I> | TypedProp<A, O, I>
 
 export type SemiProps = {
-  [key: string]: AnyProp<any>
+  [key: string]: AnyProp<any, any, any>
 }
 
-export type AsType<P extends AnyProp<any>> = P extends Mixed ? P : P extends TypedProp<any> ? P['type'] : never
+export type AsType<P extends AnyProp<any, any, any>> = P extends Mixed ? P : P extends TypedProp<any, any, any> ? P['type'] : never
 
 type StrKey<T> = keyof T & string
 
 export type RequiredProps<P extends SemiProps> = {
-  [K in StrKey<P>]: P[K] extends OptionalTypedProp<any> ? never : K
+  [K in StrKey<P>]: P[K] extends OptionalTypedProp<any, any, any> ? never : K
 }[StrKey<P>]
 
 export type OptionalProps<P extends SemiProps> = {
-  [K in StrKey<P>]: P[K] extends OptionalTypedProp<any> ? K : never
+  [K in StrKey<P>]: P[K] extends OptionalTypedProp<any, any, any> ? K : never
 }[StrKey<P>]
 
 export class SemiPartialType<P extends SemiProps, A = any, O = A, I = unknown> extends Type<A, O, I> {
@@ -1617,8 +1617,8 @@ interface SemiPropsInfo<P extends SemiProps> {
   readonly optional: SemiPropsFields<P>
 }
 
-function isTypedProp<T>(prop: AnyProp<T>): prop is TypedProp<T> {
-  const maybe = prop as Partial<TypedProp<T>>
+function isTypedProp<A, O, I>(prop: AnyProp<A, O, I>): prop is TypedProp<A, O, I> {
+  const maybe = prop as Partial<TypedProp<A, O, I>>
   if (typeof maybe.type !== 'object') {
     return false
   }
